@@ -25,7 +25,6 @@ typedef unsigned char cell_t;
 static grid_t cell_masks[16];
 static row_t *translations_down;
 static row_t *translations_up;
-static unsigned char *free_cells_table;
 
 #define REVERSED(a, b, c, d) d, c, b, a
 
@@ -166,8 +165,11 @@ static grid_t move_right(grid_t g) {
 }
 
 static unsigned int inline free_cells(const grid_t g) {
-    return free_cells_table[get_row(g, 0)] + free_cells_table[get_row(g, 1)]
-         + free_cells_table[get_row(g, 2)] + free_cells_table[get_row(g, 3)];
+    unsigned int r = 0;
+    for (int i = 0; i < 16; i ++) {
+        if (get_cell(g, i) == 0) r ++;
+    }
+    return r;
 }
 
 static grid_t spawn(grid_t g) {
@@ -339,15 +341,6 @@ static void init() {
 
     }
   #endif
-    free_cells_table = (unsigned char *) malloc(0x10000);
-    for (int i = 0; i <= 0xFFFF; i ++) {
-        free_cells_table[i] = 4;
-        for (int j = 0; j < 4; j ++) {
-            if ((i & (0xF << (4*j))) != 0) {
-                free_cells_table[i] --;
-            } 
-        }
-    }
 }
 
 
