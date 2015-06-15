@@ -410,7 +410,7 @@ static enum move best;
 
 static double imax(grid_t g, int depth) {
     if (depth > MAX_DEPTH) return heuristic(g);
-    double m = -1.0;
+    double m = -10000000000.0;
     double t;
     enum move b = NONE;
     grid_t test = move_up(g);
