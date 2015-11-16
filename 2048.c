@@ -401,7 +401,7 @@ static inline double heuristic(grid_t g) {
 }
 #endif
 
-#define MAX_DEPTH 8
+unsigned int MAX_DEPTH  = 8;
 
 static double expect(grid_t, int);
 
@@ -562,6 +562,10 @@ static void autoplay(grid_t g) {
         grids_seen = 0;
         gettimeofday(&tvs, NULL);
       #endif
+        unsigned int f = free_cells(g);
+        if (f <= 4) MAX_DEPTH = 8;
+        else if (f >= 12) MAX_DEPTH = 4;
+        else MAX_DEPTH = 10-(f/2);
         imax(g, 0);
       #ifdef TIMINGS
         gettimeofday(&tve, NULL);
